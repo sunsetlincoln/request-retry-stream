@@ -37,6 +37,7 @@ function verbFunc(verb) {
 		var maxAttempts = params.attempts || 3;
 		var delay = params.delay || 500;
 		var logFunction = params.logFunction || noop;
+		var shouldRetry = params.shouldRetry || shouldRetryFunction;
 		var attempts = 0;
 		if (!params.timeout) {
 			throw new Error('request-retry-stream you have to specify a timeout');
@@ -152,7 +153,7 @@ function verbFunc(verb) {
 			return pump(req, potentialStream);
 		}
 
-		function shouldRetry(err, resp, attempts) {
+		function shouldRetryFunction(err, resp, attempts) {
 			var retryableError = false;
 			if (err) {
 				retryableError = RETRIABLE_ERRORS.indexOf(err.code) !== -1;
